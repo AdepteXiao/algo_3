@@ -1,7 +1,16 @@
+"""
+Модуль в котором реализован поиска подстрок в строке методом
+Кнута-Морриса-Пратта
+"""
 from typing import Optional, Union
 
 
 def pi_array(key):
+    """
+    Создание вспомогательного массива пи
+    :param key: подстрока для нахождения
+    :return: массив пи
+    """
     p = [0] * len(key)
     j = 0
     i = 1
@@ -22,6 +31,16 @@ def pi_array(key):
 def kmp(string, sub_string,
         case_sensitivity: bool = False, method: str = 'first',
         count: int = None):
+    """
+    Алгоритм по нахождению индексов первых элементов всех вхождений для
+    одного ключевого слова
+    :param string: строка
+    :param sub_string: подстрока для поиска
+    :param case_sensitivity: чувствительность к регистру
+    :param method: метод обхода строки
+    :param count: необходимое количество вхождений
+    :return: множество индексов
+    """
     if not case_sensitivity:
         string = string.lower()
         sub_string = sub_string.lower()
@@ -40,7 +59,8 @@ def kmp(string, sub_string,
             i += 1
             j += 1
             if j == key_len:
-                count -= 1
+                if count:
+                    count -= 1
                 if method == 'first':
                     res.append(i - j)
                 else:
@@ -57,10 +77,21 @@ def kmp(string, sub_string,
     return tuple(res)
 
 
-def search(string: str, sub_string: Union[str, tuple[str]],
+def search(string: str, sub_string: Union[str, tuple[str, ...]],
            case_sensitivity: bool = False, method: str = 'first',
            count: Optional[int] = None, ) -> Optional[
         Union[tuple[int, ...], dict[str, tuple[int, ...]]]]:
+    """
+    Нахождение индексов первых элементов2 всех вхождений всех строк
+    :param string: строка
+    :param sub_string: подстрока для поиска
+    :param case_sensitivity: чувствительность к регистру
+    :param method: метод обхода строки
+    :param count: необходимое количество вхождений
+    :return: None если не найдено ни одного вхождения, иначе либо
+    множество индексов, если одно ключевое слово, либо
+    словарь {ключ: множество индексов} если ключей несколько
+    """
     if isinstance(sub_string, str):
         return kmp(string, sub_string, case_sensitivity, method, count)
     res = {}
@@ -71,7 +102,6 @@ def search(string: str, sub_string: Union[str, tuple[str]],
     return res
 
 
-if __name__ == '__main__':
-
-    print(search('ababbababa', ('aba', 'bba'), False, 'first', 4))
-
+# if __name__ == '__main__':
+#
+#     print(search('ababbababa', ('aba', 'bba'), False, 'first', 4))
